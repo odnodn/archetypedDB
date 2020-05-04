@@ -1,22 +1,30 @@
 const parser = require('xml2json');
 const fs = require('fs')
+const sequelize = require("../database/database")
+
 
 module.exports = {
 
-    async readXML(xml) {
-        try {
-            let file = fs.readFile(xml)
-            var json = await parser.toJson(file)
-            return json
-        } catch (error) {
-            console.log(error);
-        }
+    async readXML(xmlpath) {
+        let archetypeObj;
+        fs.readFile(xmlpath, function (err, data) {
+            if (err) {
+                return console.log(err);
+            } else {
+                archetypeObj = JSON.parse(parser.toJson(data, { reversible: true }));
+            }
+        });
+        return archetypeObj
     },
 
-    async getMetadata(json) {
-
-        let file = fs.readFile(xml);
-        var json = await parser.toJson(file)
-        return json
-    },
+    async createTables(archetypeObj) {
+        sequelize
+            .authenticate()
+            .then(() => {
+                console.log('Connection has been established successfully.');
+            })
+            .catch(err => {
+                console.error('Unable to connect to the database:', err);
+            });
+    }
 }
