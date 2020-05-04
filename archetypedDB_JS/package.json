@@ -1,0 +1,33 @@
+{
+  "name": "archetypeddb",
+  "version": "1.0.0",
+  "description": "modelagem de uma base de dados com base em arquétipos conforme recomendações da openEHR",
+  "main": "serve.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anapatriciagh/archetypedDB.git"
+  },
+  "keywords": [
+    "archetypes",
+    "database",
+    "covid-19"
+  ],
+  "author": "ana sousa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anapatriciagh/archetypedDB/issues"
+  },
+  "homepage": "https://github.com/anapatriciagh/archetypedDB#readme",
+  "dependencies": {
+    "pg": "^8.0.3",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.7",
+    "socket.io": "^2.3.0"
+  }
+}

@@ -1,14 +1,14 @@
-const parser = require('xml2json');
+const parser = require('xml2json')
 const fs = require('fs') 
 const archetypeUtil = require("./archetypeUtil")
 
 
-var xmlpath = '../docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml'
+var xmlpath = "/home/ana/Documentos/phd/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml"
 
 
 
-/* let archetypeObj = archetypeUtil.readXML(xmlpath)
-console.log(archetypeObj); */
+let archetypeObj = archetypeUtil.readXML(xmlpath)
+console.log(archetypeObj); 
 
 
  fs.readFile(xmlpath, function (err, data) {
