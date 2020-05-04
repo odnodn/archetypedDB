@@ -1,9 +1,9 @@
-const archetypeRead = require("./archetypeRead.js")
+const archetypeUtil = require("./archetypeUtil")
 
-var xml = "/home/ana/Documents/phd/projects/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml";
+var xml = "/home/ana/Documentos/phd/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml";
 
 
-archetypeRead.readXML(xml)
+archetypeUtil.readXML(xml)
     .then(result => {
         console.log(result);
 
