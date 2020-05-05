@@ -5,16 +5,6 @@ const sequelize = require("../database/database")
 
 module.exports = {
 
-    async readXML(xmlpath) {
-        fs.readFile(xmlpath, function (err, data) {
-            if (err) {
-                return console.log(err);
-            } else {
-							return archetypeObj = JSON.parse(parser.toJson(data, { reversible: true }));
-            }
-        });
-    },
-
     async createTables(archetypeObj) {
         sequelize
             .authenticate()
