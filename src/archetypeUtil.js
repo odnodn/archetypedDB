@@ -10,7 +10,7 @@ module.exports = {
             if (err) {
                 return console.log(err);
             } else {
-				return JSON.parse(parser.toJson(data, { reversible: true }));
+							return archetypeObj = JSON.parse(parser.toJson(data, { reversible: true }));
             }
         });
     },

@@ -1,0 +1,25 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "Modelagem de bases de dados relacionais a partir da arquitetura de arquétipos OpenEHR",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anapatriciagh/archetypedDB.git"
+  },
+  "keywords": [
+    "archetypes",
+    "covid-19",
+    "database"
+  ],
+  "author": "ana sousa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anapatriciagh/archetypedDB/issues"
+  },
+  "homepage": "https://github.com/anapatriciagh/archetypedDB#readme"
+}
