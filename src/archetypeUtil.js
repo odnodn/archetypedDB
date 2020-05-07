@@ -27,6 +27,7 @@ module.exports = {
         let itemTree = []
         let itemTable = []
         let column = {}
+        let tables = {}
         try {
             //create archetype metadata table
             for (const key in archetypeObj) {
@@ -39,7 +40,12 @@ module.exports = {
                                 const element1 = archetypeObj1[key1];
                                 column = await getColumn(element1, key1)
                                 if (key == 'definition') {
-                                    console.log('definition')
+                                    let attributes = archetypeObj1.attributes
+                                    if (attributes.children.rm_type_name.$t == 'ITEM_TREE') {
+                                        itemTree.push(column)
+                                    } else if (attributes.children.rm_type_name.$t == 'ITEM_TABLE') {
+                                        itemTable.push(column)
+                                    }
                                 } else if (key == 'description') {
                                     archetypeDetails.push(column)
                                 } else if (key == 'ontology') {
@@ -52,18 +58,23 @@ module.exports = {
                         archetypeMetadata.push(column)
                     }
 
-                /* const table = sequelize.define(key, {
-
-                }); */
+                    /* const table = sequelize.define(key, {
+    
+                    }); */
+                }
             }
-        }
-        console.log(archetypeMetadata);
-        console.log(archetypeDetails);
-        console.log(terminology);
 
-        //console.log(User === sequelize.models.User);
-    } catch(error) {
-        console.log(error);
+            console.log(archetypeMetadata);
+            console.log(archetypeDetails);
+            console.log(terminology);
+            console.log(itemTree);
+
+            tables = { archetypeMetadata, archetypeDetails, terminology, itemTree, itemTable }
+
+            return tables
+            //console.log(User === sequelize.models.User);
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
 }

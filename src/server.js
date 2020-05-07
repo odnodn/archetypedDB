@@ -21,7 +21,7 @@ fs.readFile(xmlpath, function (err, data) {
   } else {
     archetypeObj = JSON.parse(parser.toJson(data, { reversible: true }));
     console.log(archetypeObj);
-    archetypeObj = archetypeObj['archetype']
+    archetypeObj = archetypeObj.archetype
     archetypeUtil.mappingTables(archetypeObj)
   }
 });
