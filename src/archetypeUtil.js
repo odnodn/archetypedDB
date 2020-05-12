@@ -7,7 +7,8 @@ const { Sequelize, DataTypes } = require('sequelize');
 async function getColumn(value, key) {
     let column = {}
     column.name = key.toString()
-    column.type = await getColumnType(value)
+    let type = await getColumnType(value)
+    column.type = { type }
     column.value = value
     return column
 }
@@ -22,11 +23,11 @@ async function getColumnValue(value, key) {
 async function getColumnType(value) {
     let type
     if (Array.isArray(value)) {
-        type = DataTypes.ARRAY.key
+        type = DataTypes.ARRAY(DataTypes.JSONB)
     } else if (typeof value == 'string') {
-        type = DataTypes.STRING.key
+        type = DataTypes.STRING
     } else if (typeof value == 'object') {
-        type = DataTypes.JSONB.key
+        type = DataTypes.JSONB
     }
     return type
 }
@@ -35,13 +36,14 @@ async function getColumnType(value) {
 module.exports = {
 
     async mappingTables(archetypeObj) {
-        let archetypeDetails = {}, archetypeDetailsValues = {}
-        let archetypeMetadata = {}, archetypeMetadataValues = {} //metadados
-        let terminology = {}, terminologyValues = {}
-        let itemTree = {}, itemTreeValues = {}
-        let itemTable = {}, itemTableValues = {}
+        let archetypeDetails = {}, archetypeDetailsValues = {}, archetypeDetailsColumns = {}
+        let archetypeMetadata = {}, archetypeMetadataValues = {}, archetypeMetadataColumns = {} //metadados
+        let terminology = {}, terminologyValues = {}, terminologyColumns = {}
+        let itemTree = {}, itemTreeValues = {}, itemTreeColumns = {}
+        let itemTable = {}, itemTableValues = {}, itemTableColumns = {}
         let column = {}
         let tables = {}
+        let tablesValues = {}
         try {
             //create archetype metadata table
             for (const key in archetypeObj) {
@@ -56,41 +58,44 @@ module.exports = {
                                 if (key == 'definition') {
                                     let attributes = archetypeObj1.attributes
                                     if (attributes.children.rm_type_name.$t == 'ITEM_TREE') {
-                                        itemTree[column.name] = column.type
+                                        itemTreeColumns[column.name] = column.type
                                         itemTreeValues[column.name] = column.value
                                     } else if (attributes.children.rm_type_name.$t == 'ITEM_TABLE') {
-                                        itemTable[column.name] = column.type
+                                        itemTableColumns[column.name] = column.type
                                         itemTableValues[column.name] = column.value
                                     }
                                 } else if (key == 'description') {
-                                    archetypeDetails[column.name] = column.type
+                                    archetypeDetailsColumns[column.name] = column.type
                                     archetypeDetailsValues[column.name] = column.value
                                 } else if (key == 'ontology') {
-                                    terminology[column.name] = column.type
+                                    terminologyColumns[column.name] = column.type
                                     terminologyValues[column.name] = column.value
                                 }
                             }
                         }
                     } else {
                         column = await getColumn(element, key)
-                        archetypeMetadata[column.name] = column.type
+                        archetypeMetadataColumns[column.name] = column.type
                         archetypeMetadataValues[column.name] = column.value
                     }
-
-                    /* const table = sequelize.define(key, {
-    
-                    }); */
                 }
             }
 
-            console.log(archetypeMetadata);
-            console.log(archetypeDetails);
-            console.log(terminology);
-            console.log(itemTree);
+
+            archetypeMetadata.values = archetypeMetadataValues
+            archetypeMetadata.columns = archetypeMetadataColumns
+            archetypeDetails.values = archetypeDetailsValues
+            archetypeDetails.columns = archetypeDetailsColumns
+            terminology.values = terminologyValues
+            terminology.columns = terminologyColumns
+            itemTree.values = itemTreeValues
+            itemTree.columns = itemTreeColumns
+            itemTable.values = itemTableValues
+            itemTable.columns = itemTableColumns
 
             tables = { archetypeMetadata, archetypeDetails, terminology, itemTree, itemTable }
 
-            this.createTables(tables)
+            await this.createTables(tables)
             //return tables
         } catch (error) {
             console.log(error);
@@ -98,28 +103,38 @@ module.exports = {
     },
 
     async createTables(tables) {
+        let archetypeMetadata, archetypeMetadataCreateResult
         try {
             for (const key in tables) {
-                if (tables.hasOwnProperty(key)) {
-                    const columns = tables[key]
-                    columns.id = { type: DataTypes.UUID, primaryKey: true }
-                    
-                    const table = sequelize.define(key, columns)
-                    console.log(table);
-                    
-                   /*  for (const key in columns) {
-                        if (object.hasOwnProperty(key)) {
-                            const item = columns[key];
-                            Sequelize.addColumn(
-                                  key,
-                                  item,
-                                 Sequelize.BOOLEAN
-                            );
+                if (key) {
+                    if (tables.hasOwnProperty(key)) {
+                        const data = tables[key]
+                        data.columns.id = { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
+                        sequelize.sync({ alter: true })
+                        const table = await sequelize.define(key, data.columns)
+                        if (table.name == "archetypeMetadata") {
+                            archetypeMetadata = table
+                        } else {
+                            table.belongsTo(archetypeMetadata, { as: 'archetypeMetadata'})
+                           /*  let latest = await archetypeMetadata.findOne({
+                                attributes: [Sequelize.fn('max', Sequelize.col('id'))]
+                            }) 
+                            console.log(latest)*/
+                            data.values.archetypeMetadataId = archetypeMetadataCreateResult.id
                         }
-                    } */
-                    
+
+                        let res = await table.create(data.values)
+
+                        if(archetypeMetadata){
+                            archetypeMetadataCreateResult = res
+                        }
+
+                        console.log(res);
+                        
+                    }
                 }
             }
+
         } catch (error) {
             console.log(error);
         }

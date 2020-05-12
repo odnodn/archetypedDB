@@ -5,13 +5,13 @@ const sequelize = require("../database/database")
 
 //Starting database connection
 
-sequelize.authenticate()
+/* sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);
-  });
+  }); */
 
 var xmlpath = "/home/ana/Documents/phd/projects/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml"
 

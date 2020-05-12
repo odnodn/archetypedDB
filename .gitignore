@@ -21,3 +21,11 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+#pg_data
+
+/database/pg_data
+
+#pgadmin_data
+
+/database/pgadmin_data
