@@ -2,6 +2,7 @@ const parser = require('xml2json')
 const fs = require('fs')
 const archetypeUtil = require("./archetypeUtil")
 const sequelize = require("../database/database")
+//const csv = require('csv')
 
 //Starting database connection
 
@@ -14,6 +15,7 @@ const sequelize = require("../database/database")
   }); */
 
 var xmlpath = "/home/ana/Documents/phd/projects/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml"
+var csvFile = "/home/ana/Documents/phd/projects/archetypedDB/docs/csvs/basegeral.csv"
 
 fs.readFile(xmlpath, function (err, data) {
   if (err) {
@@ -22,7 +24,18 @@ fs.readFile(xmlpath, function (err, data) {
     archetypeObj = JSON.parse(parser.toJson(data, { reversible: true }));
     console.log(archetypeObj);
     archetypeObj = archetypeObj.archetype
-    archetypeUtil.mappingTables(archetypeObj)
+    //archetypeUtil.mappingTables(archetypeObj)
+    archetypeUtil.readingCsvDataBase(csvFile)
   }
 });
+
+
+
+
+
+
+
+
+
+
 
