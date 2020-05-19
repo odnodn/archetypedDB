@@ -14,8 +14,7 @@ exports.define = (name, columns) => {
 
 exports.create = (table, data) => {
     try {
-        sequelize.sync({ alter: true })
-        const result = table.create(data)
+        let result = table.create(data)
         return result
     } catch (error) {
         console.log(error);

@@ -144,7 +144,8 @@ module.exports = {
 	async readingCsvDataBase(csvFile) {
 		const columns = {}
 		columns.id = { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
-		var valuesToSave = [], values = {}
+		const valuesToSave = [], values = {}
+		var table
 		try {
 			let readStream = fs.createReadStream(csvFile)
 			readStream.pipe(csv())
@@ -158,42 +159,53 @@ module.exports = {
 							columns[element] = DataTypes.STRING
 						}
 						delete columns.X
-						console.log(columns)
 					}
+					sequelize.sync({ alter: true })
+					table = repository.define('data_item', columns)
 				})
+
 			readStream.pipe(csv({ separator: '\n' }))
 				.on('data', data => {
-					console.log(data);
 					for (const key in data) {
 						if (data.hasOwnProperty(key)) {
 							const element = data[key]
-							let columnList = key.split(";"), dataList = element.split(";")
-							for (let i = 1; i < columnList.length; i++) {
-								let j = 1
-								let col = columnList[i].replace(/(^"|"$)/g, '')
-								if (j < dataList.length) {
-									values[col] = dataList[j].replace(/(^"|"$)/g, '')
+							let columnList = key.split(";")
+							dataList = element.split("\r\n")
+							if (dataList.length > 1) {
+								console.log(dataList);
+								for (let index = 0; index < dataList.length; index++) {
+									const dataValue = dataList[index];
+									let dataValues = dataValue.split(";")
+									for (let i = 1; i < columnList.length; i++) {
+										let j = i + 1
+										let col = columnList[i].replace(/(^"|"$)/g, '')
+										if (j < dataValues.length) {
+											let value = dataValues[j].replace(/(^"|"$)/g, '')
+											if(col.startsWith("dt_") && value && value != 'NA'){
+												value = new Date(value)
+											}else if(value == 'NA'){
+												value = new Date(0)
+											}
+											values[col] = value
+										}
+									}
+									//console.log(values);
 								}
-								j++
+								valuesToSave.push(values)
 							}
-							valuesToSave.push(values)
-							
 						}
-						//console.log(valuesToSave[0])
 					}
+					
 				})
 				.on('end', () => {
-					sequelize.sync({ force: true })
-					repository.define('data_item', columns)
-						.then(table => {
-							for (let index = 0; index < valuesToSave.length; index++) {
-								const data = valuesToSave[index];
-								let res = repository.create(table, data)
-								console.log(res)
-							}
-						})
-						.catch(error, console.log(error))
+					console.log("csv data file was sucessfully processed");
 				});
+				await sequelize.sync({ alter: true })
+				for (let index = 0; index < valuesToSave.length; index++) {
+					const data = valuesToSave[index];
+					let res = await repository.create(table, data)
+					console.log(res)
+				}
 		} catch (error) {
 			console.log(error)
 		}
