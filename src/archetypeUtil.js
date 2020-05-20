@@ -144,7 +144,7 @@ module.exports = {
 	async readingCsvDataBase(csvFile) {
 		const columns = {}
 		columns.id = { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
-		const valuesToSave = [], values = {}
+		const valuesToSave = []
 		var table
 		try {
 			let readStream = fs.createReadStream(csvFile)
@@ -175,23 +175,24 @@ module.exports = {
 								console.log(dataList);
 								for (let index = 0; index < dataList.length; index++) {
 									const dataValue = dataList[index];
-									let dataValues = dataValue.split(";")
+									let dataValues = dataValue.split(";"), values = {}
 									for (let i = 1; i < columnList.length; i++) {
 										let j = i + 1
 										let col = columnList[i].replace(/(^"|"$)/g, '')
 										if (j < dataValues.length) {
 											let value = dataValues[j].replace(/(^"|"$)/g, '')
-											if(col.startsWith("dt_") && value && value != 'NA'){
-												value = new Date(value)
-											}else if(value == 'NA'){
-												value = new Date(0)
-											}
+											if(col.startsWith("dt_") && value){
+												value = new Date(value) 
+												if(Object.keys(value).length === 0){
+													value = null
+												} 
+											} 
 											values[col] = value
 										}
 									}
 									//console.log(values);
+									valuesToSave.push(values)
 								}
-								valuesToSave.push(values)
 							}
 						}
 					}
@@ -200,11 +201,12 @@ module.exports = {
 				.on('end', () => {
 					console.log("csv data file was sucessfully processed");
 				});
-				await sequelize.sync({ alter: true })
+				await sequelize.sync({ force: true })
 				for (let index = 0; index < valuesToSave.length; index++) {
 					const data = valuesToSave[index];
-					let res = await repository.create(table, data)
-					console.log(res)
+					await sequelize.sync({ alter: true })
+					let res = await table.create(data)
+					//console.log(res)
 				}
 		} catch (error) {
 			console.log(error)
