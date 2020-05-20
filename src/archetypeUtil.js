@@ -5,6 +5,7 @@ const { Sequelize, DataTypes } = require('sequelize')
 //var csv = require('csv')
 const csv = require('csv-parser')
 const repository = require("./repository")
+const moment = require('moment')
 
 
 async function getColumn(value, key) {
@@ -145,7 +146,6 @@ module.exports = {
 		const columns = {}
 		columns.id = { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
 		const valuesToSave = []
-		var table
 		try {
 			let readStream = fs.createReadStream(csvFile)
 			readStream.pipe(csv())
@@ -160,8 +160,6 @@ module.exports = {
 						}
 						delete columns.X
 					}
-					sequelize.sync({ alter: true })
-					table = repository.define('data_item', columns)
 				})
 
 			readStream.pipe(csv({ separator: '\n' }))
@@ -181,12 +179,12 @@ module.exports = {
 										let col = columnList[i].replace(/(^"|"$)/g, '')
 										if (j < dataValues.length) {
 											let value = dataValues[j].replace(/(^"|"$)/g, '')
-											if(col.startsWith("dt_") && value){
-												value = new Date(value) 
-												if(Object.keys(value).length === 0){
+											if (col.startsWith("dt_")) {
+												value = moment(value)
+												if (!value.isValid()) {
 													value = null
-												} 
-											} 
+												}
+											}
 											values[col] = value
 										}
 									}
@@ -196,20 +194,33 @@ module.exports = {
 							}
 						}
 					}
-					
 				})
 				.on('end', () => {
 					console.log("csv data file was sucessfully processed");
 				});
-				await sequelize.sync({ force: true })
-				for (let index = 0; index < valuesToSave.length; index++) {
-					const data = valuesToSave[index];
-					await sequelize.sync({ alter: true })
-					let res = await table.create(data)
-					//console.log(res)
-				}
+				await this.createDataItemTable(columns, valuesToSave)
 		} catch (error) {
 			console.log(error)
 		}
+	},
+
+	async createDataItemTable(columns, valuesToSave) {
+		try {
+			await sequelize.sync({ alter: true })
+			const table = await repository.define('data_item', columns)
+			if (table) {
+				await sequelize.sync({ alter: true })
+				for (let index = 0; index < valuesToSave.length; index++) {
+					const data = valuesToSave[index]
+					let res = await table.create(data)
+					console.log(res)
+				}
+			} else {
+				console.log("create table error");
+			}
+		} catch (error) {
+			console.log(error);
+		}
+
 	}
 }
