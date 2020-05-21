@@ -2,19 +2,18 @@ const sequelize = require("../database/database")
 const { Sequelize, DataTypes } = require('sequelize')
 
 
-exports.define = (name, columns) => {
+exports.define = async (name, columns) => {
     try {
-        sequelize.sync({ alter: true })
-        const table = sequelize.define(name, columns)
+        const table = await sequelize.define(name, columns)
         return table
     } catch (error) {
         console.log(error);
     }
 }
 
-exports.create = (table, data) => {
+exports.create = async (table, data) => {
     try {
-        let result = table.create(data)
+        const result = table.create(data)
         return result
     } catch (error) {
         console.log(error);

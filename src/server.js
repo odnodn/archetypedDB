@@ -21,21 +21,22 @@ fs.readFile(xmlpath, function (err, data) {
   if (err) {
     return console.log(err);
   } else {
-    archetypeObj = JSON.parse(parser.toJson(data, { reversible: true }));
+    var archetypeObj = JSON.parse(parser.toJson(data, { reversible: true }));
     console.log(archetypeObj);
     archetypeObj = archetypeObj.archetype
-    //archetypeUtil.mappingTables(archetypeObj)
-    archetypeUtil.readingCsvDataBase(csvFile)
+    start(archetypeObj)
   }
 });
 
+async function start(archetypeObj) {
+  const archetypeTables = await archetypeUtil.mappingArchetypeTables(archetypeObj)
+  const archetypeMetadata = await archetypeUtil.createArchetypeTables(archetypeTables)
+  var dataSetTableData = await archetypeUtil.readingCsvDataBase(csvFile)
+  await archetypeUtil.createInsertDataItemTable(dataSetTableData, archetypeMetadata)
+    .then(() => {
+      console.log("done");
 
-
-
-
-
-
-
-
-
+    })
+    .catch(error => console.log(error))
+}
 

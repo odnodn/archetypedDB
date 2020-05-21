@@ -39,7 +39,7 @@ async function getColumnType(value) {
 
 module.exports = {
 
-	async mappingTables(archetypeObj) {
+	async mappingArchetypeTables(archetypeObj) {
 		let archetypeDetails = {}, archetypeDetailsValues = {}, archetypeDetailsColumns = {}
 		let archetypeMetadata = {}, archetypeMetadataValues = {}, archetypeMetadataColumns = {} //metadados
 		let terminology = {}, terminologyValues = {}, terminologyColumns = {}
@@ -48,7 +48,6 @@ module.exports = {
 		let column = {}
 		let tables = {}
 		try {
-			//create archetype metadata table
 			for (const key in archetypeObj) {
 				if (archetypeObj.hasOwnProperty(key)) {
 					const element = archetypeObj[key]
@@ -98,14 +97,13 @@ module.exports = {
 
 			tables = { archetypeMetadata, archetypeDetails, terminology, itemTree, itemTable }
 
-			await this.createTables(tables)
-			//return tables
+			return tables
 		} catch (error) {
 			console.log(error);
 		}
 	},
 
-	async createTables(tables) {
+	async createArchetypeTables(tables) {
 		let archetypeMetadata, archetypeMetadataCreateResult
 		await sequelize.sync({ force: true })
 		try {
@@ -136,7 +134,8 @@ module.exports = {
 					}
 				}
 			}
-
+			let result = { archetypeMetadata, archetypeMetadataCreateResult }
+			return result
 		} catch (error) {
 			console.log(error);
 		}
@@ -146,6 +145,7 @@ module.exports = {
 		const columns = {}
 		columns.id = { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
 		const valuesToSave = []
+		let result = {}
 		try {
 			let readStream = fs.createReadStream(csvFile)
 			readStream.pipe(csv())
@@ -160,6 +160,7 @@ module.exports = {
 						}
 						delete columns.X
 					}
+					result.columns = columns
 				})
 
 			readStream.pipe(csv({ separator: '\n' }))
@@ -191,6 +192,7 @@ module.exports = {
 									//console.log(values);
 									valuesToSave.push(values)
 								}
+								result.valuesToSave = valuesToSave
 							}
 						}
 					}
@@ -198,21 +200,26 @@ module.exports = {
 				.on('end', () => {
 					console.log("csv data file was sucessfully processed");
 				});
-				await this.createDataItemTable(columns, valuesToSave)
+			//result = { columns, valuesToSave }
+			return result
 		} catch (error) {
 			console.log(error)
 		}
 	},
 
-	async createDataItemTable(columns, valuesToSave) {
+	async createInsertDataItemTable(params, archetype) {
 		try {
 			await sequelize.sync({ alter: true })
-			const table = await repository.define('data_item', columns)
+			const table = await repository.define('data_item', params.columns)
+			if (Object.keys(table.associations).length == 0) {
+				table.belongsTo(archetype.archetypeMetadata, { as: 'archetypeMetadata' })
+			}
 			if (table) {
 				await sequelize.sync({ alter: true })
-				for (let index = 0; index < valuesToSave.length; index++) {
-					const data = valuesToSave[index]
-					let res = await table.create(data)
+				for (let index = 0; index < params.valuesToSave.length; index++) {
+					const data = params.valuesToSave[index]
+					data.archetypeMetadataId = archetype.archetypeMetadataCreateResult.id
+					let res = await repository.create(table, data)
 					console.log(res)
 				}
 			} else {
