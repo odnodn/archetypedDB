@@ -148,7 +148,7 @@ module.exports = {
 		let result = {}
 		try {
 			let readStream = fs.createReadStream(csvFile)
-			readStream.pipe(csv())
+			await readStream.pipe(csv())
 				.on('headers', headers => {
 					let list = headers[0].split(";")
 					for (let index = 0; index < list.length; index++) {
@@ -163,28 +163,37 @@ module.exports = {
 					result.columns = columns
 				})
 
-			readStream.pipe(csv({ separator: '\n' }))
+			await readStream.pipe(csv({ separator: '\n' }))
 				.on('data', data => {
 					for (const key in data) {
 						if (data.hasOwnProperty(key)) {
 							const element = data[key]
 							let columnList = key.split(";")
-							dataList = element.split("\r\n")
-							if (dataList.length > 1) {
-								console.log(dataList);
+							console.log(columnList);
+							console.log(element);
+							var dataList = element.split("\r")
+							if (dataList.length > 0) {
+								//console.log(dataList);
 								for (let index = 0; index < dataList.length; index++) {
 									const dataValue = dataList[index];
 									let dataValues = dataValue.split(";"), values = {}
-									for (let i = 1; i < columnList.length; i++) {
-										let j = i + 1
-										let col = columnList[i].replace(/(^"|"$)/g, '')
+									//console.log(dataValues);
+									for (let i = 0; i < columnList.length; i++) {
+										let j = i 
+										col = columnList[i].replace(/(^"|"$)/g, '')										
 										if (j < dataValues.length) {
 											let value = dataValues[j].replace(/(^"|"$)/g, '')
-											if (col.startsWith("dt_")) {
-												value = moment(value)
-												if (!value.isValid()) {
-													value = null
+											if(value){
+												console.log(value);
+												if (col.startsWith("dt_")) {
+													//console.log(value)
+													value = new Date(value).toString()
+													if (value == 'Invalid Date') {
+														value = null
+													}
 												}
+											}else{
+												value = null
 											}
 											values[col] = value
 										}

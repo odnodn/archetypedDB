@@ -24,8 +24,8 @@ hs_err_pid*
 
 #pg_data
 
-/database/pg_data
+./database/pg_data
 
 #pgadmin_data
 
-/database/pgadmin_data
+./database/pgadmin_data

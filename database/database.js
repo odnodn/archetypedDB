@@ -5,7 +5,7 @@ const sequelize = new Sequelize(
   'postgres',
   'postgres',
   {
-    host: '192.168.15.2',
+    host: 'localhost',
     dialect: 'postgres',
     port: 5432
   }

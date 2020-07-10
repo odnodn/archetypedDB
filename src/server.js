@@ -12,10 +12,10 @@ const sequelize = require("../database/database")
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);
-  }); */
+  });  */
 
 var xmlpath = "/home/ana/Documents/phd/projects/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml"
-var csvFile = "/home/ana/Documents/phd/projects/archetypedDB/docs/csvs/basegeral.csv"
+var csvFile = "/home/ana/Documents/phd/projects/archetypedDB/docs/csvs/basegeral_09_07_2020.csv"
 
 fs.readFile(xmlpath, function (err, data) {
   if (err) {
