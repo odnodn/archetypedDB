@@ -6,6 +6,7 @@ const { Sequelize, DataTypes } = require('sequelize')
 const csv = require('csv-parser')
 const repository = require("./repository")
 const moment = require('moment')
+var list = []
 
 
 async function getColumn(value, key) {
@@ -141,14 +142,11 @@ module.exports = {
 		}
 	},
 
-	async readingCsvDataBase(csvFile) {
+	async getCsvHeaders(csvFile){
 		const columns = {}
 		columns.id = { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
-		const valuesToSave = []
-		let result = {}
-		try {
-			let readStream = fs.createReadStream(csvFile)
-			await readStream.pipe(csv())
+		let readStream = fs.createReadStream(csvFile)
+			readStream.pipe(csv())
 				.on('headers', headers => {
 					let list = headers[0].split(";")
 					for (let index = 0; index < list.length; index++) {
@@ -160,17 +158,25 @@ module.exports = {
 						}
 						delete columns.X
 					}
-					result.columns = columns
+//					result.columns = columns
 				})
+				return columns;
+	},
 
-			await readStream.pipe(csv({ separator: '\n' }))
+	async getCsvData(csvFile) {
+		const valuesToSave = []
+		let result = {}
+		try {
+			let readStream = fs.createReadStream(csvFile)
+			readStream.pipe(csv({ separator: '\n' }))
 				.on('data', data => {
+					list.push(data)
 					for (const key in data) {
 						if (data.hasOwnProperty(key)) {
 							const element = data[key]
 							let columnList = key.split(";")
-							console.log(columnList);
-							console.log(element);
+							/* console.log(columnList);
+							console.log(element); */
 							var dataList = element.split("\r")
 							if (dataList.length > 0) {
 								//console.log(dataList);
@@ -184,7 +190,7 @@ module.exports = {
 										if (j < dataValues.length) {
 											let value = dataValues[j].replace(/(^"|"$)/g, '')
 											if(value){
-												console.log(value);
+												//console.log(value);
 												if (col.startsWith("dt_")) {
 													//console.log(value)
 													value = new Date(value).toString()
@@ -207,26 +213,26 @@ module.exports = {
 					}
 				})
 				.on('end', () => {
+					console.log(valuesToSave);
 					console.log("csv data file was sucessfully processed");
 				});
-			//result = { columns, valuesToSave }
-			return result
+			return valuesToSave
 		} catch (error) {
 			console.log(error)
 		}
 	},
 
-	async createInsertDataItemTable(params, archetype) {
+	async createInsertDataItemTable(columns, valuesToSave, archetype) {
 		try {
 			await sequelize.sync({ alter: true })
-			const table = await repository.define('data_item', params.columns)
+			const table = await repository.define('data_item', columns)
 			if (Object.keys(table.associations).length == 0) {
 				table.belongsTo(archetype.archetypeMetadata, { as: 'archetypeMetadata' })
 			}
 			if (table) {
 				await sequelize.sync({ alter: true })
-				for (let index = 0; index < params.valuesToSave.length; index++) {
-					const data = params.valuesToSave[index]
+				for (let index = 0; index < valuesToSave.length; index++) {
+					const data = valuesToSave[index]
 					data.archetypeMetadataId = archetype.archetypeMetadataCreateResult.id
 					let res = await repository.create(table, data)
 					console.log(res)
