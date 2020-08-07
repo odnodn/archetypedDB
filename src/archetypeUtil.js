@@ -198,6 +198,15 @@ module.exports = {
 														value = null
 													}
 												}
+
+												if(col == 'municipio'){
+													if(value == ' ' || value == '-' || value == 'NAO'){
+														value = 'NAOINFORMADO'
+													}else{
+														value = value.split(" ").join("_");
+													}
+												}
+
 											}else{
 												value = null
 											}
