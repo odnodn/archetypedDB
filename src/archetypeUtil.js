@@ -203,7 +203,7 @@ module.exports = {
 													if(value == ' ' || value == '-' || value == 'NAO'){
 														value = 'NAOINFORMADO'
 													}else{
-														value = value.split(" ").join("_");
+														value = value.split(" ").join("_")
 													}
 												}
 
