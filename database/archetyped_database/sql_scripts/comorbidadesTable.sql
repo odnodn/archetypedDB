@@ -1,15 +1,15 @@
-insert into comorbidades values(
-    default, 'Hypertension',  'I10', 'SAH', 'Hipertensão', 'HAS'
-    default, 'Diabetes mellitus', 'E10', 'DM', 'Diabetes mellitus', 'DM'
-    default, 'Chronic Obstructive Pulmonary Disease', 'COPD', 'J44', 'Doença Pulmonar Obstrutiva Crônica', 'DPOC', 
-    default, 'Cardiovascular disease, unspecified', 'CVD', 'I51.6', 'Doenças Cardiovasculares', 'CVC',
-    default, 'Diseases of liver', null, 'K70', 'Doenças do Fígado', null,
-    default, 'Malignant Neoplasms', null, 'C00', 'Malignidade',  null,
-    default, 'Asthma', null, 'J45', 'Asma', null,
-    default, 'Other disorders of kidney and ureter', null, 'N25', 'Doenças Renais', null,
-    default, 'Human immunodeficiency virus [HIV] disease', 'HIV', 'B20', 'Vírus da Himunodeficiência Humana', 'HIV'  ,
-    default, 'Obesity', null, 'E66', 'Obesidade', null
-)
+insert into comorbidities (id, name, icd_code, abbreviation, name_pt, abbreviation_pt)
+values
+
+       (default, 'Diabetes mellitus', 'E10', 'DM', 'Diabetes mellitus', 'DM'),
+       (default, 'Chronic obstructive pulmonary disease, unspecified', 'J44', 'COPD', 'Doença Pulmonar Obstrutiva Crônica', 'DPOC'),
+       (default, 'Cardiovascular disease, unspecified', 'I51.6', 'CVD', 'Doenças Cardiovasculares', 'CVC'),
+       (default, 'Diseases of liver', 'K70', null, 'Doenças do Fígado', null),
+       (default, 'Malignant Neoplasms', 'C00', null, 'Malignidade',  null),
+       (default, 'Asthma',  'J45', null, 'Asma', null),
+       (default, 'Disorder of kidney and ureter, unspecified', 'N28.9', null, 'Doenças Renais', null),
+       (default, 'Human immunodeficiency virus [HIV] disease', 'B20', 'HIV', 'Vírus da Himunodeficiência Humana', 'HIV'),
+       (default, 'Obesity', 'E66', null, 'Obesidade', null);
 
 alter table comorbidades add column name_pt varchar not null 
 alter table comorbidades add column sigla_pt varchar not null 
