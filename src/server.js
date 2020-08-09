@@ -8,6 +8,7 @@ const sequelize = require("../database/database")
 
 sequelize.authenticate()
   .then(() => {
+    start()
     console.log('Connection has been established successfully.');
   })
   .catch(err => {
@@ -17,7 +18,7 @@ sequelize.authenticate()
 var xmlpath = "/home/ana/Documentos/phd/projects/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml"
 var csvFile = "/home/ana/Documentos/phd/projects/archetypedDB/docs/csvs/basegeral_09_07_2020.csv"
 
-fs.readFile(xmlpath, function (err, data) {
+/* fs.readFile(xmlpath, function (err, data) {
   if (err) {
     return console.log(err);
   } else {
@@ -26,14 +27,22 @@ fs.readFile(xmlpath, function (err, data) {
     archetypeObj = archetypeObj.archetype
     start(archetypeObj)
   }
-});
+}); */
 
-async function start(archetypeObj) {
+/* async function start(archetypeObj) {
   const archetypeTables = await archetypeUtil.mappingArchetypeTables(archetypeObj)
   const archetypeMetadata = await archetypeUtil.createArchetypeTables(archetypeTables)
   var columns = await archetypeUtil.getCsvHeaders(csvFile)
   var valuesToSave = await archetypeUtil.getCsvData(csvFile)
   await archetypeUtil.createInsertDataItemTable(columns, valuesToSave, archetypeMetadata)
+    .then(() => {
+      console.log("done");
+    })
+    .catch(error => console.log(error))
+} */
+
+async function start() {
+  await archetypeUtil.insertComorbitidiesAssociativeTable()
     .then(() => {
       console.log("done");
     })

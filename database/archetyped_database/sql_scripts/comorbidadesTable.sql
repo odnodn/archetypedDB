@@ -1,3 +1,16 @@
+CREATE TABLE comorbidities
+(
+    id              serial  not null
+        constraint "comorbities_pkey"
+            primary key,
+    name            varchar not null,
+    icd_code        varchar not null,
+    abbreviation    varchar null,
+    name_pt         varchar not null,
+    abbreviation_pt varchar null
+);
+
+
 insert into comorbidities (id, name, icd_code, abbreviation, name_pt, abbreviation_pt)
 values
 
@@ -12,4 +25,5 @@ values
        (default, 'Obesity', 'E66', null, 'Obesidade', null);
 
 alter table comorbidades add column name_pt varchar not null 
-alter table comorbidades add column sigla_pt varchar not null 
+alter table comorbidades add column abbreviation_pt varchar not null 
+alter table comorbidities add column synonyms varchar[] not null

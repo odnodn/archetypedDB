@@ -6,6 +6,9 @@ const { Sequelize, DataTypes } = require('sequelize')
 const csv = require('csv-parser')
 const repository = require("./repository")
 const moment = require('moment')
+const DataItemModel = require("./models/dataItem.model")
+const ComorbiditiesModel = require("./models/comorbidities.model")
+const DataItemComorbidities = require("./models/dataItemComorbidities.model")
 var list = []
 
 
@@ -142,25 +145,25 @@ module.exports = {
 		}
 	},
 
-	async getCsvHeaders(csvFile){
+	async getCsvHeaders(csvFile) {
 		const columns = {}
 		columns.id = { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }
 		let readStream = fs.createReadStream(csvFile)
-			readStream.pipe(csv())
-				.on('headers', headers => {
-					let list = headers[0].split(";")
-					for (let index = 0; index < list.length; index++) {
-						const element = list[index].replace(/(^"|"$)/g, '')
-						if (element.startsWith("dt_")) {
-							columns[element] = DataTypes.DATE
-						} else {
-							columns[element] = DataTypes.STRING
-						}
-						delete columns.X
+		readStream.pipe(csv())
+			.on('headers', headers => {
+				let list = headers[0].split(";")
+				for (let index = 0; index < list.length; index++) {
+					const element = list[index].replace(/(^"|"$)/g, '')
+					if (element.startsWith("dt_")) {
+						columns[element] = DataTypes.DATE
+					} else {
+						columns[element] = DataTypes.STRING
 					}
-//					result.columns = columns
-				})
-				return columns;
+					delete columns.X
+				}
+				//					result.columns = columns
+			})
+		return columns;
 	},
 
 	async getCsvData(csvFile) {
@@ -185,11 +188,11 @@ module.exports = {
 									let dataValues = dataValue.split(";"), values = {}
 									//console.log(dataValues);
 									for (let i = 0; i < columnList.length; i++) {
-										let j = i 
-										col = columnList[i].replace(/(^"|"$)/g, '')										
+										let j = i
+										col = columnList[i].replace(/(^"|"$)/g, '')
 										if (j < dataValues.length) {
 											let value = dataValues[j].replace(/(^"|"$)/g, '')
-											if(value){
+											if (value) {
 												//console.log(value);
 												if (col.startsWith("dt_")) {
 													//console.log(value)
@@ -199,15 +202,15 @@ module.exports = {
 													}
 												}
 
-												if(col == 'municipio'){
-													if(value == ' ' || value == '-' || value == 'NAO'){
+												if (col == 'municipio') {
+													if (value == ' ' || value == '-' || value == 'NAO') {
 														value = 'NAOINFORMADO'
-													}else{
+													} else {
 														value = value.split(" ").join("_")
 													}
 												}
 
-											}else{
+											} else {
 												value = null
 											}
 											values[col] = value
@@ -253,5 +256,46 @@ module.exports = {
 			console.log(error);
 		}
 
+	},
+
+	async insertComorbitidiesAssociativeTable() {
+		try {
+			await sequelize.sync({ alter: true })
+			//let columns = { dataItemId : { type: DataTypes.INTEGER }, comorbiditiesId : { type: DataTypes.INTEGER } }
+			//const dataItemComorbidities = await repository.define('dataItemComorbidities', columns)
+			const dataItemList = await repository.getAll(DataItemModel)
+			const comorbidities = await repository.getAll(ComorbiditiesModel)
+			for (let i = 0; i < dataItemList.length; i++) {
+				const dataItem = dataItemList[i];
+				const dataItemComorbidities = dataItem.comorbidades
+				if (dataItemComorbidities && dataItemComorbidities != 'NULL' && isNaN(dataItemComorbidities)) {
+					for (let j = 0; j < comorbidities.length; j++) {
+						const comorbidity = comorbidities[j];
+						const synonyms = comorbidity.synonyms
+						for (let k = 0; k < synonyms.length; k++) {
+							const synonym = synonyms[k];
+							
+							let dataItemComorbiditiesList = dataItemComorbidities.split(' ')
+							for (let l = 0; l < dataItemComorbiditiesList.length; l++) {
+								const item = dataItemComorbiditiesList[l];
+								if(item.includes(synonym)){
+									let associationObj = { 
+										dataItemId: dataItem.id,
+										comorbiditiyId: comorbidity.id
+									}
+									await repository.create(DataItemComorbidities, associationObj)
+									.then( result => console.log(result))
+									.catch( error => console.log(error))
+								}
+							}
+						}
+	
+					}
+				}
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	}
+
 }
