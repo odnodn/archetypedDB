@@ -269,27 +269,38 @@ module.exports = {
 				const dataItem = dataItemList[i];
 				const dataItemComorbidities = dataItem.comorbidades
 				if (dataItemComorbidities && dataItemComorbidities != 'NULL' && isNaN(dataItemComorbidities)) {
-					for (let j = 0; j < comorbidities.length; j++) {
-						const comorbidity = comorbidities[j];
-						const synonyms = comorbidity.synonyms
-						for (let k = 0; k < synonyms.length; k++) {
-							const synonym = synonyms[k];
-							
-							let dataItemComorbiditiesList = dataItemComorbidities.split(' ')
-							for (let l = 0; l < dataItemComorbiditiesList.length; l++) {
-								const item = dataItemComorbiditiesList[l];
-								if(item.includes(synonym)){
-									let associationObj = { 
-										dataItemId: dataItem.id,
-										comorbiditiyId: comorbidity.id
+					let dataItemComorbiditiesList = dataItemComorbidities.split(' ')
+					for (let l = 0; l < dataItemComorbiditiesList.length; l++) {
+						const item = dataItemComorbiditiesList[l];
+						let exit = false
+						for (let j = 0; j < comorbidities.length; j++) {
+							if(exit){
+								break
+							} 
+							const comorbidity = comorbidities[j];
+							const synonyms = comorbidity.synonyms
+							for (let k = 0; k < synonyms.length; k++) {
+								const synonym = synonyms[k];
+								if (item.indexOf(synonym) != -1) {
+									const dataItemComorbidityAssociation = await repository.getOneDataItemComorbidities(dataItem.id, comorbidity.id)
+									if (!dataItemComorbidityAssociation) {
+										let associationObj = {
+											dataItemId: dataItem.id,
+											comorbidityId: comorbidity.id
+										}
+										await repository.create(DataItemComorbidities, associationObj)
+											.then(result => console.log(result))
+											.catch(error => console.log(error))
+										exit = true
+										break
+									}else{
+										exit = true
+										break
 									}
-									await repository.create(DataItemComorbidities, associationObj)
-									.then( result => console.log(result))
-									.catch( error => console.log(error))
 								}
 							}
 						}
-	
+
 					}
 				}
 			}
