@@ -281,7 +281,7 @@ module.exports = {
 							const synonyms = comorbidity.synonyms
 							for (let k = 0; k < synonyms.length; k++) {
 								const synonym = synonyms[k];
-								if (item.indexOf(synonym) != -1) {
+								if (item.indexOf(synonym.toUpperCase()) != -1) {
 									const dataItemComorbidityAssociation = await repository.getOneDataItemComorbidities(dataItem.id, comorbidity.id)
 									if (!dataItemComorbidityAssociation) {
 										let associationObj = {

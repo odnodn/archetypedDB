@@ -8,7 +8,6 @@ const sequelize = require("../database/database")
 
 sequelize.authenticate()
   .then(() => {
-    start()
     console.log('Connection has been established successfully.');
   })
   .catch(err => {
@@ -40,6 +39,8 @@ var csvFile = "/home/ana/Documentos/phd/projects/archetypedDB/docs/csvs/basegera
     })
     .catch(error => console.log(error))
 } */
+
+start()
 
 async function start() {
   await archetypeUtil.insertComorbitidiesAssociativeTable()
