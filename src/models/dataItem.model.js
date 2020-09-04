@@ -49,9 +49,18 @@ const DataItem = sequelize.define('data_item', {
   }, 
   tipo:{
     type: DataTypes.STRING
+  },
+  raca:{
+    type: DataTypes.STRING
   }
 });
 
 DataItem.belongsTo(archetypeMetadata, { as: 'archetypeMetadata' })
+
+/* DataItem.sync({
+  alter:{
+    drop:false
+  }
+}) */
 
 module.exports = DataItem

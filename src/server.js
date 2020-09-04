@@ -15,9 +15,9 @@ sequelize.authenticate()
   });  
 
 var xmlpath = "/home/ana/Documentos/phd/projects/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml"
-var csvFile = "/home/ana/Documentos/phd/projects/archetypedDB/docs/csvs/basegeral_09_07_2020.csv"
+var csvFile = "/home/ana/Documentos/phd/projects/archetypedDB/docs/csvs/basegeral_03_09_2020.csv"
 
-/* fs.readFile(xmlpath, function (err, data) {
+/*  fs.readFile(xmlpath, function (err, data) {
   if (err) {
     return console.log(err);
   } else {
@@ -26,9 +26,9 @@ var csvFile = "/home/ana/Documentos/phd/projects/archetypedDB/docs/csvs/basegera
     archetypeObj = archetypeObj.archetype
     start(archetypeObj)
   }
-}); */
+}); 
 
-/* async function start(archetypeObj) {
+ async function start(archetypeObj) {
   const archetypeTables = await archetypeUtil.mappingArchetypeTables(archetypeObj)
   const archetypeMetadata = await archetypeUtil.createArchetypeTables(archetypeTables)
   var columns = await archetypeUtil.getCsvHeaders(csvFile)
@@ -38,8 +38,8 @@ var csvFile = "/home/ana/Documentos/phd/projects/archetypedDB/docs/csvs/basegera
       console.log("done");
     })
     .catch(error => console.log(error))
-} */
-
+} 
+ */
 start()
 
 async function start() {
@@ -48,5 +48,5 @@ async function start() {
       console.log("done");
     })
     .catch(error => console.log(error))
-}
+} 
 
