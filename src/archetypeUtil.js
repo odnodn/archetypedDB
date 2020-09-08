@@ -9,7 +9,12 @@ const moment = require('moment')
 const DataItemModel = require("./models/dataItem.model")
 const ComorbiditiesModel = require("./models/comorbidities.model")
 const DataItemComorbidities = require("./models/dataItemComorbidities.model")
+const xl = require('excel4node');
+const { time } = require('console')
+var wb = new xl.Workbook();
+var ws = wb.addWorksheet('SegmentationTimeCost');
 var list = []
+
 
 
 async function getColumn(value, key) {
@@ -38,6 +43,17 @@ async function getColumnType(value) {
 		type = DataTypes.JSONB
 	}
 	return type
+}
+
+
+async function addSegmentationTimeCost(associativeTableId, timeCost) {
+	try {
+		let row = ws.lastUsedRow+1
+		ws.cell(row, 1).number(associativeTableId)
+		ws.cell(row, 2).number(timeCost)
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 
@@ -260,6 +276,9 @@ module.exports = {
 
 	async insertComorbitidiesAssociativeTable() {
 		try {
+			
+			ws.cell(1, 1).string('Data Item Table Id')
+			ws.cell(1, 2).string('Time cost in miliseconds')
 			await sequelize.sync({ alter: true })
 			//let columns = { dataItemId : { type: DataTypes.INTEGER }, comorbiditiesId : { type: DataTypes.INTEGER } }
 			//const dataItemComorbidities = await repository.define('dataItemComorbidities', columns)
@@ -268,15 +287,23 @@ module.exports = {
 			for (let i = 0; i < dataItemList.length; i++) {
 				const dataItem = dataItemList[i];
 				const dataItemComorbidities = dataItem.comorbidades
-				if (dataItemComorbidities && dataItemComorbidities != 'NULL' && isNaN(dataItemComorbidities)) {
+				if (dataItemComorbidities &&
+					dataItemComorbidities != 'NULL' &&
+					dataItemComorbidities != 'NA' &&
+					dataItemComorbidities != null &&
+					isNaN(dataItemComorbidities)) {
 					let dataItemComorbiditiesList = dataItemComorbidities.split(' ')
+					var start, isSegmented
 					for (let l = 0; l < dataItemComorbiditiesList.length; l++) {
+						isSegmented = false
+						//start = new Date();
+						start = moment();
 						const item = dataItemComorbiditiesList[l];
 						let exit = false
 						for (let j = 0; j < comorbidities.length; j++) {
-							if(exit){
+							if (exit) {
 								break
-							} 
+							}
 							const comorbidity = comorbidities[j];
 							const synonyms = comorbidity.synonyms
 							for (let k = 0; k < synonyms.length; k++) {
@@ -289,21 +316,32 @@ module.exports = {
 											comorbidityId: comorbidity.id
 										}
 										await repository.create(DataItemComorbidities, associationObj)
-											.then(result => console.log(result))
+											.then(result => {
+												console.log(result)
+												isSegmented = true
+											})
 											.catch(error => console.log(error))
 										exit = true
 										break
-									}else{
+									} else {
 										exit = true
 										break
 									}
 								}
 							}
 						}
-
+					}
+					//var end = new Date();
+					var end = moment();
+					if (isSegmented) {
+						var timeCost = moment.duration(end.diff(start))
+						//var timeCost = new Date(end - start)
+						console.log(timeCost.seconds(), timeCost.milliseconds())
+						await addSegmentationTimeCost(dataItem.id, timeCost.milliseconds())
 					}
 				}
 			}
+			wb.write('/home/ana/Documentos/phd/projects/archetypedDB/docs/sheets/segmentationTimeCost.xlsx')
 		} catch (error) {
 			console.log(error);
 		}

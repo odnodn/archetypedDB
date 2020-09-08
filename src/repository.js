@@ -23,7 +23,13 @@ exports.create = async (table, data) => {
 
 exports.getAll = async (table) => {
     try {
-        const result = await table.findAll()
+        const result = await table.findAll({
+            offset: 0,
+            limit: 1000,
+            order: [
+                ['id', 'ASC']
+            ]
+        })
         return result
     } catch (error) {
         console.log(error);
@@ -42,7 +48,7 @@ exports.getOne = async (table, id) => {
 exports.getOneDataItemComorbidities = async (dataItemId, comorbidityId) => {
     try {
         const result = await DataItemComorbidities.findOne({
-            where:{
+            where: {
                 dataItemId: dataItemId,
                 comorbidityId: comorbidityId
             }
