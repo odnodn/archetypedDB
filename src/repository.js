@@ -24,8 +24,6 @@ exports.create = async (table, data) => {
 exports.getAll = async (table) => {
     try {
         const result = await table.findAll({
-            offset: 0,
-            limit: 1000,
             order: [
                 ['id', 'ASC']
             ]

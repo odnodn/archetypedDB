@@ -10,10 +10,10 @@ const DataItemModel = require("./models/dataItem.model")
 const ComorbiditiesModel = require("./models/comorbidities.model")
 const DataItemComorbidities = require("./models/dataItemComorbidities.model")
 const xl = require('excel4node');
-const { time } = require('console')
 var wb = new xl.Workbook();
 var ws = wb.addWorksheet('SegmentationTimeCost');
 var list = []
+const perf = require('execution-time')()
 
 
 
@@ -46,11 +46,12 @@ async function getColumnType(value) {
 }
 
 
-async function addSegmentationTimeCost(associativeTableId, timeCost) {
+async function addSegmentationTimeCost(dataItemId, timeCost, timeString) {
 	try {
 		let row = ws.lastUsedRow+1
-		ws.cell(row, 1).number(associativeTableId)
+		ws.cell(row, 1).number(dataItemId)
 		ws.cell(row, 2).number(timeCost)
+		ws.cell(row, 3).string(timeString)
 	} catch (error) {
 		console.log(error);
 	}
@@ -277,8 +278,9 @@ module.exports = {
 	async insertComorbitidiesAssociativeTable() {
 		try {
 			
-			ws.cell(1, 1).string('Data Item Table Id')
-			ws.cell(1, 2).string('Time cost in miliseconds')
+			ws.cell(1, 1).string('Patient id')
+			ws.cell(1, 2).string('Segmentation time cost (ms)')
+			ws.cell(1, 3).string('Segmentation time cost (precise words)')
 			await sequelize.sync({ alter: true })
 			//let columns = { dataItemId : { type: DataTypes.INTEGER }, comorbiditiesId : { type: DataTypes.INTEGER } }
 			//const dataItemComorbidities = await repository.define('dataItemComorbidities', columns)
@@ -293,19 +295,17 @@ module.exports = {
 					dataItemComorbidities != null &&
 					isNaN(dataItemComorbidities)) {
 					let dataItemComorbiditiesList = dataItemComorbidities.split(' ')
-					var start, isSegmented
+					var isSegmented = false
 					for (let l = 0; l < dataItemComorbiditiesList.length; l++) {
-						isSegmented = false
-						//start = new Date();
-						start = moment();
+						perf.start()
 						const item = dataItemComorbiditiesList[l];
 						let exit = false
-						for (let j = 0; j < comorbidities.length; j++) {
+						for (let j = 0; j < comorbidities.length; j++) { 
 							if (exit) {
 								break
 							}
 							const comorbidity = comorbidities[j];
-							const synonyms = comorbidity.synonyms
+							const synonyms = comorbidity.synonyms 
 							for (let k = 0; k < synonyms.length; k++) {
 								const synonym = synonyms[k];
 								if (item.indexOf(synonym.toUpperCase()) != -1) {
@@ -331,13 +331,10 @@ module.exports = {
 							}
 						}
 					}
-					//var end = new Date();
-					var end = moment();
+					var end = perf.stop()
 					if (isSegmented) {
-						var timeCost = moment.duration(end.diff(start))
-						//var timeCost = new Date(end - start)
-						console.log(timeCost.seconds(), timeCost.milliseconds())
-						await addSegmentationTimeCost(dataItem.id, timeCost.milliseconds())
+						console.log(end.time, end.preciseWords)
+						await addSegmentationTimeCost(dataItem.id, end.time, end.preciseWords)
 					}
 				}
 			}
