@@ -1,0 +1,67 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.Logistic -R 1.0E-8 -M -1
+Relation:     patients_comorbidities_covid19-weka.filters.unsupervised.attribute.AddCluster-Wweka.clusterers.SimpleKMeans -N 2 -A "weka.core.EuclideanDistance -R first-last" -I 500 -S 10-weka.filters.unsupervised.attribute.Remove-R3
+Instances:    34066
+Attributes:   2
+              comorbidities
+              result
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Logistic Regression with ridge parameter of 1.0E-8
+Coefficients...
+               Class
+Variable           1        2        3        4        5        6        7
+==========================================================================
+result       -1.3826   1.6376  -1.3139  -2.2496  -2.2496   -1.277  -1.8367
+Intercept     6.7196  -2.0794   7.0803 -17.3445 -17.3445   4.7875   4.5799
+
+
+Odds Ratios...
+               Class
+Variable           1        2        3        4        5        6        7
+==========================================================================
+result        0.2509   5.1429   0.2688   0.1054   0.1054   0.2789   0.1593
+
+
+Time taken to build model: 0.92 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       18450               54.1596 %
+Incorrectly Classified Instances     15616               45.8404 %
+Kappa statistic                          0     
+Mean absolute error                      0.1421
+Root mean squared error                  0.2666
+Relative absolute error                 99.9508 %
+Root relative squared error             99.984  %
+Total Number of Instances            34066     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 0         0          0         0         0          0.502    1
+                 0         0          0         0         0          0.701    2
+                 1         1          0.542     1         0.703      0.506    3
+                 0         0          0         0         0          ?        4
+                 0         0          0         0         0          ?        5
+                 0         0          0         0         0          0.505    6
+                 0         0          0         0         0          0.553    7
+                 0         0          0         0         0          0.598    8
+Weighted Avg.    0.542     0.542      0.293     0.542     0.381      0.506
+
+=== Confusion Matrix ===
+
+     a     b     c     d     e     f     g     h   <-- classified as
+     0     0 12449     0     0     0     0     0 |     a = 1
+     0     0    19     0     0     0     0     0 |     b = 2
+     0     0 18450     0     0     0     0     0 |     c = 3
+     0     0     0     0     0     0     0     0 |     d = 4
+     0     0     0     0     0     0     0     0 |     e = 5
+     0     0  1897     0     0     0     0     0 |     f = 6
+     0     0  1215     0     0     0     0     0 |     g = 7
+     0     0    36     0     0     0     0     0 |     h = 8
+

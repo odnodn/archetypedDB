@@ -43,7 +43,7 @@ var csvFile = "/home/ana/Documentos/phd/projects/archetypedDB/docs/csvs/basegera
 start()
 
 async function start() {
-  await archetypeUtil.insertComorbitidiesAssociativeTable()
+  await archetypeUtil.insertComorbitidiesUnsegmentedAssociativeTable()
     .then(() => {
       console.log("done");
     })

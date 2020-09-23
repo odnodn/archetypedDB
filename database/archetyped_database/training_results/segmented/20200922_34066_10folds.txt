@@ -1,0 +1,70 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.Logistic -R 1.0E-8 -M -1
+Relation:     patients_comorbidities_covid19-weka.filters.unsupervised.attribute.AddCluster-Wweka.clusterers.SimpleKMeans -N 2 -A "weka.core.EuclideanDistance -R first-last" -I 500 -S 10
+Instances:    34066
+Attributes:   3
+              comorbidities
+              result
+              cluster
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Logistic Regression with ridge parameter of 1.0E-8
+Coefficients...
+                              Class
+Variable                          1                       2                       3                       4                       5                       6                       7
+===================================================================================================================================================================================
+result                       -1.323                  1.6376                 -1.3139                -18.9729                -18.9729                  -1.277                 -1.8367
+cluster                    111.0724               -105.7441                 74.8961                536.6218                536.6218                  74.825                 75.2116
+Intercept                   -11.108                 -2.0794                  7.0803               -537.0228               -537.0228                  4.7875                  4.5799
+
+
+Odds Ratios...
+                              Class
+Variable                          1                       2                       3                       4                       5                       6                       7
+===================================================================================================================================================================================
+result                       0.2663                  5.1429                  0.2688                       0                       0                  0.2789                  0.1593
+cluster        1.730382202060407E48                       0   3.3647096281192945E32  1.1268582758302955E233  1.1268586274451033E233   3.1340183765153927E32     4.61293606872784E32
+
+
+Time taken to build model: 3 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       30899               90.7033 %
+Incorrectly Classified Instances      3167                9.2967 %
+Kappa statistic                          0.8222
+Mean absolute error                      0.0413
+Root mean squared error                  0.1437
+Relative absolute error                 29.0504 %
+Root relative squared error             53.9025 %
+Total Number of Instances            34066     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 1         0          1         1         1          1        1
+                 0         0          0         0         0          0.807    2
+                 1         0.203      0.853     1         0.921      0.901    3
+                 0         0          0         0         0          ?        4
+                 0         0          0         0         0          ?        5
+                 0         0          0         0         0          0.695    6
+                 0         0          0         0         0          0.724    7
+                 0         0          0         0         0          0.744    8
+Weighted Avg.    0.907     0.11       0.828     0.907     0.864      0.919
+
+=== Confusion Matrix ===
+
+     a     b     c     d     e     f     g     h   <-- classified as
+ 12449     0     0     0     0     0     0     0 |     a = 1
+     0     0    19     0     0     0     0     0 |     b = 2
+     0     0 18450     0     0     0     0     0 |     c = 3
+     0     0     0     0     0     0     0     0 |     d = 4
+     0     0     0     0     0     0     0     0 |     e = 5
+     0     0  1897     0     0     0     0     0 |     f = 6
+     0     0  1215     0     0     0     0     0 |     g = 7
+     0     0    36     0     0     0     0     0 |     h = 8
+
