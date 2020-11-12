@@ -12,12 +12,12 @@ sequelize.authenticate()
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err);
-  });  
+  });
 
-var xmlpath = "/home/ana/Documentos/phd/projects/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml"
-var csvFile = "/home/ana/Documentos/phd/projects/archetypedDB/docs/csvs/basegeral_03_09_2020.csv"
+var xmlpath = "/home/ana/Documents/phd/projects/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml"
+var csvFile = "/home/ana/Documents/phd/projects/archetypedDB/docs/csvs/basegeral_03_09_2020.csv"
 
-/*  fs.readFile(xmlpath, function (err, data) {
+fs.readFile(xmlpath, function (err, data) {
   if (err) {
     return console.log(err);
   } else {
@@ -39,14 +39,14 @@ var csvFile = "/home/ana/Documentos/phd/projects/archetypedDB/docs/csvs/basegera
     })
     .catch(error => console.log(error))
 } 
- */
-start()
+ 
+//start()
 
-async function start() {
+/* async function start() {
   await archetypeUtil.insertComorbitidiesUnsegmentedAssociativeTable()
     .then(() => {
       console.log("done");
     })
     .catch(error => console.log(error))
-} 
+} */
 

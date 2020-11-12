@@ -9,4 +9,4 @@ values
        (default, 'Disorder of kidney and ureter, unspecified', 'N28.9', null, 'Doenças Renais', null, array['Renais', 'Rins'], now(), now()),
        (default, 'Obesity', 'E66', null, 'Obesidade', null, array['Obesidade', 'Sobrepeso'], now(), now()),
        (default, 'Essential (primary) hypertension', 'I10', 'HTN', 'Hipertensão', 'HAS', array['Hipertensao'], now(), now()),
-       (default, 'Essential (primary) hypertension', 'I10', 'HTN', 'Hipertensão', 'HAS', array['Hipertensao'], now(), now());
+       
