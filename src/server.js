@@ -16,7 +16,7 @@ sequelize.authenticate()
 
 var xmlpath = "/home/ana/Documents/phd/projects/archetypedDB/docs/archetypes/openEHR-EHR-ADMIN_ENTRY.episode_institution.v0.xml"
 var csvFile = "/home/ana/Documents/phd/projects/archetypedDB/docs/csvs/basegeral_03_09_2020.csv"
-
+/* 
 fs.readFile(xmlpath, function (err, data) {
   if (err) {
     return console.log(err);
@@ -38,15 +38,16 @@ fs.readFile(xmlpath, function (err, data) {
       console.log("done");
     })
     .catch(error => console.log(error))
-} 
+}  */
  
-//start()
+start()
 
-/* async function start() {
+async function start() {
+  //await archetypeUtil.insertComorbitidiesAssociativeTable()
   await archetypeUtil.insertComorbitidiesUnsegmentedAssociativeTable()
     .then(() => {
       console.log("done");
     })
     .catch(error => console.log(error))
-} */
+} 
 

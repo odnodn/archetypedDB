@@ -7,7 +7,7 @@ const Comorbidities = sequelize.define('comorbidities', {
     autoIncrement: true,
     primaryKey: true
   },
-  name: {
+  icd_name: {
     type: DataTypes.STRING,
     allowNull: false
   },

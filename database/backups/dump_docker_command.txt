@@ -1,1 +1,1 @@
-sudo docker run -i postgres /usr/bin/pg_dump -h 192.168.15.8 -U postgres archetypedb > /home/ana/Documentos/phd/projects/archetypedDB/database/backups/covid_pe_backup_11_09_2020.sql
+sudo docker run -i postgres /usr/bin/pg_dump -h 172.21.4.146 -U postgres postgres > /home/ana/Documents/phd/projects/archetypedDB/database/backups/covid_pe_backup_12_11_2020.sql
