@@ -306,3 +306,19 @@ values
 
 
        alter table comorbidities rename column name to icd_name
+
+
+select dic.id,
+       CASE
+           WHEN di.classe = 'DESCARTADO' or di.classe = 'NEGATIVO' THEN 0
+           WHEN di.classe = 'CONFIRMADO' THEN 1 END AS result,
+       c.id
+from "dataItemComorbidities" dic
+         join data_items di on dic."dataItemId" = di.id
+         join comorbidities c on dic."comorbidityId" = c.id
+where classe != 'NULL'
+  and classe is not null and classe != 'EM INVESTIGACAO';
+
+select classe from data_items where id = 28
+
+

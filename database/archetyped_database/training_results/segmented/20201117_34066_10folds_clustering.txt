@@ -1,0 +1,59 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.Logistic -R 1.0E-8 -M -1
+Relation:     patients_comorbidities_covid19-weka.filters.unsupervised.attribute.AddCluster-Wweka.clusterers.SimpleKMeans -N 2 -A "weka.core.EuclideanDistance -R first-last" -I 500 -S 10
+Instances:    34066
+Attributes:   3
+              patient
+              result
+              cluster
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Logistic Regression with ridge parameter of 1.0E-8
+Coefficients...
+                Class
+Variable     cluster1
+=====================
+patient        0.0419
+result         1.6522
+Intercept   -721.0202
+
+
+Odds Ratios...
+                Class
+Variable     cluster1
+=====================
+patient        1.0428
+result         5.2185
+
+
+Time taken to build model: 0.64 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       34056               99.9706 %
+Incorrectly Classified Instances        10                0.0294 %
+Kappa statistic                          0.9994
+Mean absolute error                      0.0011
+Root mean squared error                  0.0182
+Relative absolute error                  0.2147 %
+Root relative squared error              3.6389 %
+Total Number of Instances            34066     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 1         0          1         1         1          1        cluster1
+                 1         0          1         1         1          1        cluster2
+Weighted Avg.    1         0          1         1         1          1    
+
+=== Confusion Matrix ===
+
+     a     b   <-- classified as
+ 17031     3 |     a = cluster1
+     7 17025 |     b = cluster2
+
+
