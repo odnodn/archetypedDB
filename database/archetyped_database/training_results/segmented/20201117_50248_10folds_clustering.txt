@@ -1,0 +1,76 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.Logistic -R 1.0E-8 -M -1
+Relation:     patients_comorbidities_covid19-weka.filters.supervised.instance.SMOTE-C0-K5-P100.0-S1-weka.filters.unsupervised.attribute.AddCluster-Wweka.clusterers.SimpleKMeans -N 6 -A "weka.core.EuclideanDistance -R first-last" -I 500 -S 10
+Instances:    50248
+Attributes:   3
+              comorbidities
+              result
+              cluster
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Logistic Regression with ridge parameter of 1.0E-8
+Coefficients...
+                                    Class
+Variable                                1                      2                      3                      6                      7
+=====================================================================================================================================
+result                           -50.7156               -52.1684                98.0724                19.6743               -55.4492
+cluster=cluster1               -3722.8391                 73.301              4657.1148              -577.4782              -318.6289
+cluster=cluster2                4657.1148                 52.389             -3989.3785              -412.7295              -227.7273
+cluster=cluster3               -1750.8022                34.4725             -2625.0534              -271.5804              4665.3862
+cluster=cluster4               -1794.5224                35.3333              -2690.605              4657.1148              -153.5889
+cluster=cluster5               -1695.4704            -28872.2994              -2542.092              -262.9974             -6433.9894
+cluster=cluster6               -1694.5587              4693.9116              -2540.725               -262.856              -145.0332
+Intercept                        536.7407               -32.6146               -902.184               202.7088               151.1439
+
+
+Odds Ratios...
+                                    Class
+Variable                                1                      2                      3                      6                      7
+=====================================================================================================================================
+result                                  0                      0  3.9109657252534557E42         350314440.4708                      0
+cluster=cluster1                        0   6.826776430000895E31               Infinity                      0                      0
+cluster=cluster2                 Infinity    5.65243898079398E22                      0                      0                      0
+cluster=cluster3                        0    9.35864087510111E14                      0                      0               Infinity
+cluster=cluster4                        0   2.213435303451699E15                      0               Infinity                      0
+cluster=cluster5                        0                      0                      0                      0                      0
+cluster=cluster6                        0               Infinity                      0                      0                      0
+
+
+Time taken to build model: 0.72 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       50248              100      %
+Incorrectly Classified Instances         0                0      %
+Kappa statistic                          1     
+Mean absolute error                      0     
+Root mean squared error                  0     
+Relative absolute error                  0      %
+Root relative squared error              0      %
+Total Number of Instances            50248     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 1         0          1         1         1          1        1
+                 1         0          1         1         1          1        2
+                 1         0          1         1         1          1        3
+                 1         0          1         1         1          1        6
+                 1         0          1         1         1          1        7
+                 1         0          1         1         1          1        8
+Weighted Avg.    1         0          1         1         1          1    
+
+=== Confusion Matrix ===
+
+     a     b     c     d     e     f   <-- classified as
+ 18270     0     0     0     0     0 |     a = 1
+     0    37     0     0     0     0 |     b = 2
+     0     0 27393     0     0     0 |     c = 3
+     0     0     0  2834     0     0 |     d = 6
+     0     0     0     0  1650     0 |     e = 7
+     0     0     0     0     0    64 |     f = 8
+
