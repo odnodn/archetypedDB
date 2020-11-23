@@ -1,0 +1,77 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.Logistic -R 1.0E-8 -M -1
+Relation:     patients_comorbidities_covid19-weka.filters.supervised.instance.SMOTE-C0-K5-P100.0-S1-weka.filters.unsupervised.attribute.AddCluster-Wweka.clusterers.SimpleKMeans -N 6 -A "weka.core.EuclideanDistance -R first-last" -I 500 -S 10
+Instances:    50248
+Attributes:   3
+              comorbidities
+              result
+              cluster
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Logistic Regression with ridge parameter of 1.0E-8
+Coefficients...
+                                   Class
+Variable                        cluster1               cluster2               cluster3               cluster4               cluster5
+====================================================================================================================================
+comorbidities=1               -3980.7796              4647.0766               -238.994              -411.8399                14.8195
+comorbidities=2               -2535.2486             -1690.9062              -831.7737              -262.2894            -20852.1312
+comorbidities=3                4647.0766             -3714.8147               -334.393              -576.2334                20.7349
+comorbidities=6               -2684.8055             -1790.6544              -161.1876              4647.0766                 9.9949
+comorbidities=7               -2619.3952             -1747.0285              4647.5936               -270.995                 9.7514
+comorbidities=8               -2536.6127             -1691.8159              -152.2906              -262.4306              4662.4462
+result                            97.861               -50.6063               -76.3532                19.6319               -17.8702
+Intercept                      -899.6896               536.1328               178.8528               202.8169               -11.5555
+
+
+Odds Ratios...
+                                   Class
+Variable                        cluster1               cluster2               cluster3               cluster4               cluster5
+====================================================================================================================================
+comorbidities=1                        0               Infinity                      0                      0           2729047.2496
+comorbidities=2                        0                      0                      0                      0                      0
+comorbidities=3                 Infinity                      0                      0                      0        1011730961.7898
+comorbidities=6                        0                      0                      0               Infinity              21913.771
+comorbidities=7                        0                      0               Infinity                      0             17177.6445
+comorbidities=8                        0                      0                      0                      0               Infinity
+result             3.1657651313577726E42                      0                      0         335769258.4552                      0
+
+
+Time taken to build model: 0.37 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       50247               99.998  %
+Incorrectly Classified Instances         1                0.002  %
+Kappa statistic                          1     
+Mean absolute error                      0     
+Root mean squared error                  0.0026
+Relative absolute error                  0.0035 %
+Root relative squared error              0.8383 %
+Total Number of Instances            50248     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 1         0          1         1         1          1        cluster1
+                 1         0          1         1         1          1        cluster2
+                 1         0          0.999     1         1          1        cluster3
+                 1         0          1         1         1          1        cluster4
+                 1         0          1         1         1          1        cluster5
+                 0.973     0          1         0.973     0.986      1        cluster6
+Weighted Avg.    1         0          1         1         1          1    
+
+=== Confusion Matrix ===
+
+     a     b     c     d     e     f   <-- classified as
+ 27393     0     0     0     0     0 |     a = cluster1
+     0 18270     0     0     0     0 |     b = cluster2
+     0     0  1650     0     0     0 |     c = cluster3
+     0     0     0  2834     0     0 |     d = cluster4
+     0     0     0     0    64     0 |     e = cluster5
+     0     0     1     0     0    36 |     f = cluster6
+
+

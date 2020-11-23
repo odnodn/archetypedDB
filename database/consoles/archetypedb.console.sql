@@ -308,11 +308,35 @@ values
        alter table comorbidities rename column name to icd_name
 
 
-select dic.id,
+select
+       dic.id,
        CASE
            WHEN di.classe = 'DESCARTADO' or di.classe = 'NEGATIVO' THEN 0
            WHEN di.classe = 'CONFIRMADO' THEN 1 END AS result,
-       c.id
+       CASE
+           WHEN c.id = 1 THEN 'diabetes'
+           WHEN c.id = 2 THEN 'hypertension'
+           WHEN c.id = 3 THEN 'copd'
+           WHEN c.id = 4 THEN 'cardiovascular_disease'
+           WHEN c.id = 5 THEN 'liver_disease'
+           WHEN c.id = 6 THEN 'malignancy'
+           WHEN c.id = 7 THEN 'kidney_disease'
+           WHEN c.id = 8 THEN 'obesity'
+           END AS result
+from "dataItemComorbidities" dic
+         join data_items di on dic."dataItemId" = di.id
+         join comorbidities c on dic."comorbidityId" = c.id
+where classe != 'NULL'
+  and classe is not null and classe != 'EM INVESTIGACAO';
+
+
+
+
+select
+       c.id,
+       CASE
+           WHEN di.classe = 'DESCARTADO' or di.classe = 'NEGATIVO' THEN 0
+           WHEN di.classe = 'CONFIRMADO' THEN 1 END AS result
 from "dataItemComorbidities" dic
          join data_items di on dic."dataItemId" = di.id
          join comorbidities c on dic."comorbidityId" = c.id
@@ -320,5 +344,13 @@ where classe != 'NULL'
   and classe is not null and classe != 'EM INVESTIGACAO';
 
 select classe from data_items where id = 28
+
+
+select count(dic.id)
+from "dataItemComorbidities" dic
+         join comorbidities c on dic."comorbidityId" = c.id
+join data_items di on dic."dataItemId" = di.id
+where c.id = 8 and classe != 'NULL'
+  and classe is not null and classe != 'EM INVESTIGACAO';
 
 

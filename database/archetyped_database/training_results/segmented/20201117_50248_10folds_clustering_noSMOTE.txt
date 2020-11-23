@@ -1,0 +1,81 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.Logistic -R 1.0E-8 -M -1
+Relation:     patients_comorbidities_covid19-weka.filters.unsupervised.attribute.AddCluster-Wweka.clusterers.SimpleKMeans -N 6 -A "weka.core.EuclideanDistance -R first-last" -I 500 -S 10
+Instances:    34066
+Attributes:   3
+              comorbidities
+              result
+              cluster
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Logistic Regression with ridge parameter of 1.0E-8
+Coefficients...
+                                   Class
+Variable                        cluster1               cluster2               cluster3               cluster4               cluster5
+====================================================================================================================================
+comorbidities=1               -6163.5075              7221.4927              -393.2828              -633.7221                34.6631
+comorbidities=2               -3913.3122             -2640.4782              -249.7017              -402.3606              7247.5309
+comorbidities=3                7221.4927             -5756.9392              -544.4156              -877.2523                47.9837
+comorbidities=4                        0                      0                      0                      0                      0
+comorbidities=5                        0                      0                      0                      0                      0
+comorbidities=6               -4141.7682             -2794.6272              -264.2791              7221.4927                 23.293
+comorbidities=7               -4055.7834             -2736.6096              7229.7883              -417.0093                22.8094
+comorbidities=8               -3915.2671             -2641.7973             -7827.8192              -402.5616            -24629.6263
+result                          152.0746               -78.6415              -105.5968                30.5078               -47.1554
+Intercept                     -1342.6887               779.8459               249.3299               309.3935                -23.231
+
+
+Odds Ratios...
+                                   Class
+Variable                        cluster1               cluster2               cluster3               cluster4               cluster5
+====================================================================================================================================
+comorbidities=1                        0               Infinity                      0                      0  1.1324242849530415E15
+comorbidities=2                        0                      0                      0                      0               Infinity
+comorbidities=3                 Infinity                      0                      0                      0   6.903102696947417E20
+comorbidities=4                        1                      1                      1                      1                      1
+comorbidities=5                        1                      1                      1                      1                      1
+comorbidities=6                        0                      0                      0               Infinity   1.306256184387939E10
+comorbidities=7                        0                      0               Infinity                      0        8054072482.0502
+comorbidities=8                        0                      0                      0                      0                      0
+result             1.1095724621779093E66                      0                      0  1.7756182667665312E13                      0
+
+
+Time taken to build model: 0.26 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       34066              100      %
+Incorrectly Classified Instances         0                0      %
+Kappa statistic                          1     
+Mean absolute error                      0     
+Root mean squared error                  0     
+Relative absolute error                  0      %
+Root relative squared error              0      %
+Total Number of Instances            34066     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 1         0          1         1         1          1        cluster1
+                 1         0          1         1         1          1        cluster2
+                 1         0          1         1         1          1        cluster3
+                 1         0          1         1         1          1        cluster4
+                 1         0          1         1         1          1        cluster5
+                 1         0          1         1         1          1        cluster6
+Weighted Avg.    1         0          1         1         1          1    
+
+=== Confusion Matrix ===
+
+     a     b     c     d     e     f   <-- classified as
+ 18450     0     0     0     0     0 |     a = cluster1
+     0 12449     0     0     0     0 |     b = cluster2
+     0     0  1215     0     0     0 |     c = cluster3
+     0     0     0  1897     0     0 |     d = cluster4
+     0     0     0     0    19     0 |     e = cluster5
+     0     0     0     0     0    36 |     f = cluster6
+
+

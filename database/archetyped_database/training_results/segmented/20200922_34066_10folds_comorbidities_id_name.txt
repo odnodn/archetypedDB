@@ -1,0 +1,77 @@
+=== Run information ===
+
+Scheme:weka.classifiers.functions.Logistic -R 1.0E-8 -M -1
+Relation:     patients_comorbidities_covid19-weka.filters.unsupervised.attribute.AddCluster-Wweka.clusterers.SimpleKMeans -N 6 -A "weka.core.EuclideanDistance -R first-last" -I 500 -S 10
+Instances:    34066
+Attributes:   3
+              comorbiditiesid
+              result
+              comorbidities
+Test mode:10-fold cross-validation
+
+=== Classifier model (full training set) ===
+
+Logistic Regression with ridge parameter of 1.0E-8
+Coefficients...
+                                      Class
+Variable                           diabetes            hypertension                    copd  cardiovascular_disease          kidney_disease
+===========================================================================================================================================
+comorbiditiesid=1                 7230.2629                239.7891                105.5901              -6170.9928               -634.4918
+comorbiditiesid=2                -2645.0057               7390.2339                 67.0744              -3920.0221               -403.0505
+comorbiditiesid=3                 -2643.685                 152.246               7301.3387              -3918.0648               -402.8493
+comorbiditiesid=4                -5763.9308                331.9365                146.1668               7230.2629               -878.3177
+comorbiditiesid=7                -2798.0212                 161.134                 70.9547              -4146.7982               7230.2629
+comorbiditiesid=8                -2739.9331              -4488.4255              -1995.8825               -4060.709               -417.5157
+result                              -78.737               -326.8971               -141.3656                152.2593                 30.5448
+Intercept                          777.2935                -132.414                -62.8649              -1347.8193                 306.272
+
+
+Odds Ratios...
+                                      Class
+Variable                           diabetes            hypertension                    copd  cardiovascular_disease          kidney_disease
+===========================================================================================================================================
+comorbiditiesid=1                  Infinity  1.3774551177717983E104    7.197826817970627E45                       0                       0
+comorbiditiesid=2                         0                Infinity   1.3490734666863725E29                       0                       0
+comorbiditiesid=3                         0   1.3170770808996777E66                Infinity                       0                       0
+comorbiditiesid=4                         0  1.4394583864043171E144    3.016145581570764E63                Infinity                       0
+comorbiditiesid=7                         0    9.541587159686851E69    6.534755437877705E30                       0                Infinity
+comorbiditiesid=8                         0                       0                       0                       0                       0
+result                                    0                       0                       0   1.3346426236937086E66   1.8426397522606066E13
+
+
+Time taken to build model: 0.24 seconds
+
+=== Stratified cross-validation ===
+=== Summary ===
+
+Correctly Classified Instances       34066              100      %
+Incorrectly Classified Instances         0                0      %
+Kappa statistic                          1     
+Mean absolute error                      0     
+Root mean squared error                  0     
+Relative absolute error                  0      %
+Root relative squared error              0      %
+Total Number of Instances            34066     
+
+=== Detailed Accuracy By Class ===
+
+               TP Rate   FP Rate   Precision   Recall  F-Measure   ROC Area  Class
+                 1         0          1         1         1          1        diabetes
+                 1         0          1         1         1          1        hypertension
+                 1         0          1         1         1          1        copd
+                 1         0          1         1         1          1        cardiovascular_disease
+                 1         0          1         1         1          1        kidney_disease
+                 1         0          1         1         1          1        obesity
+Weighted Avg.    1         0          1         1         1          1    
+
+=== Confusion Matrix ===
+
+     a     b     c     d     e     f   <-- classified as
+ 12449     0     0     0     0     0 |     a = diabetes
+     0    36     0     0     0     0 |     b = hypertension
+     0     0    19     0     0     0 |     c = copd
+     0     0     0 18450     0     0 |     d = cardiovascular_disease
+     0     0     0     0  1897     0 |     e = kidney_disease
+     0     0     0     0     0  1215 |     f = obesity
+
+
